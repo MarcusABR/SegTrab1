@@ -1,48 +1,52 @@
-package br.com.segcomp.rsa;
+package br.com.bb.RSA;
 
 import java.math.BigInteger;
-import java.util.Random;
+import java.security.SecureRandom;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        String message =  "a";
+public class Teste {
+    public static void main(String[] args) {
+        PrimeGenerator pr = new PrimeGenerator(new SecureRandom());
 
-        BigInteger p = BigInteger.probablePrime(1024, new Random());
-        BigInteger q = BigInteger.probablePrime(1024, new Random());
+        BigInteger p1 = pr.generate();
+        BigInteger p2 = pr.generate();
+        BigInteger n = p1.multiply(p2);
+        BigInteger phi = p1.subtract(BigInteger.ONE).multiply(p2.subtract(BigInteger.ONE));
+        BigInteger e = findE(phi);
+        System.out.println(p1);
+        System.out.println(p2);
+        System.out.println(n);
+        System.out.println(phi);
+        System.out.println();
+
+        BigInteger d = e.modInverse(p1.multiply(p2));
+        System.out.println("Este é o d: "+ d);
+
+
+        char message = 'A';
+
+        Integer value = Integer.valueOf(message);
+        BigInteger cypher = new BigInteger(String.valueOf(value)).modPow(e, n);
+        System.out.println("Cifrada: "+ cypher);
+
+        BigInteger decypher = cypher.modPow(d, n);
+        System.out.println("Decifrada: "+ decypher);
+        //find e
+        //com E e N tenho a chvae
+
+        // 
         
 
-        System.out.println(p.toString());
-        System.out.println(q.toString());
-        BigInteger n = p.multiply(q);
-        BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
-
-        BigInteger e = calculateE(phi);
-        System.out.println("AChou "+e.toString());
-
-
-        // find E wich is coprime with n and phi, being less tha phi
-        // Thats the public key
-
-
-
-        // d.e mod phi(n) = 1, find d
-
+        
+        // System.out.println(value);
+        // System.out.println();     
 
     }
 
-    static BigInteger calculateE(BigInteger phi){
-        BigInteger i = BigInteger.valueOf(2);
-        while ( i.gcd(phi).compareTo(BigInteger.ONE)!=0){
-            i.add(BigInteger.ONE);
+    public static BigInteger findE(BigInteger phi){
+        BigInteger e = new BigInteger("65538");
+        while (!phi.gcd(e).equals(BigInteger.ONE)) {
+            e = e.add(BigInteger.ONE);
         }
-        return i;
+        return e;
     }
-
-    
 }
