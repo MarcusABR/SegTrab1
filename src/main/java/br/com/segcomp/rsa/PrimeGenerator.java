@@ -1,10 +1,9 @@
-package br.com.segcomp.rsa;
+package br.com.bb.RSA;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.BitSet;
 import java.util.Random;
-import java.util.random.RandomGenerator;
 
 public class PrimeGenerator {
     private Random randomGenerator;
@@ -17,25 +16,28 @@ public class PrimeGenerator {
         // SecureRandom
     }
 
-    public static void main(String[] args) {
-        PrimeGenerator pr = new PrimeGenerator(new SecureRandom());
-        BigInteger mayPrime = pr.generate();
-        System.out.println(mayPrime);
-        System.out.println(pr.millerRabin(mayPrime, 10));
-    }
-
     public BigInteger generate(){
-        return getRandom();
+        int idx = 0;
+        BigInteger value = getRandom();
+        while(!millerRabin(value, 40)){
+            idx++;
+            value = getRandom();
+        }
+        return value;
     }
 
     public boolean millerRabin(BigInteger n, int rounds){
         BigInteger d = n.subtract(BigInteger.ONE);
         final BigInteger TWO = new BigInteger("2");
 
+        if(n.mod(TWO).equals(BigInteger.ZERO)) {
+            return false;
+        }
         int k = 0;
+
         while(d.mod(TWO).equals(BigInteger.ZERO)){
             k++;
-            d.divide(TWO);
+            d = d.divide(TWO);
         }
 
         for(int i = 0; i< rounds;i++){
@@ -80,3 +82,4 @@ public class PrimeGenerator {
     }
     
 }
+
