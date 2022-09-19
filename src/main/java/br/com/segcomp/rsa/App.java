@@ -1,9 +1,9 @@
-package br.com.bb.RSA;
+package br.com.segcomp.rsa;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-public class Teste {
+public class App {
     public static void main(String[] args) {
         PrimeGenerator pr = new PrimeGenerator(new SecureRandom());
 

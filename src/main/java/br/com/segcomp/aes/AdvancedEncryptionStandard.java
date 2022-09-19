@@ -11,6 +11,7 @@ abstract class AdvancedEncryptionStandard {
     Block[] expandedKey;
 
     abstract void encrypt(Block block);
-
     abstract void decrypt(Block block);
+    abstract void encryptStream(Block[] block);
+    abstract void decryptStream(Block[] block);
 }

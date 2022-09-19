@@ -60,8 +60,8 @@ public class AES128CTR extends AdvancedEncryptionStandard {
     void decryptStream(Block[] blocks) {
         BigInteger counter = new BigInteger(this.counter);
         for (Block b : blocks) {
-            Block initializationVector = new Block(this.counter);
-            decrypt(initializationVector);
+            Block initializationVector = new Block(counter.toByteArray());
+            encrypt(initializationVector);
             decryptor.addRoundKey(b, initializationVector);
             counter = counter.add(BigInteger.ONE);
         }
