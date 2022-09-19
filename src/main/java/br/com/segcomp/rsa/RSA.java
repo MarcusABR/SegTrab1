@@ -43,7 +43,7 @@ public class RSA {
     }
 
     private  BigInteger findE(BigInteger phi){
-        BigInteger e = new BigInteger("65537");
+        BigInteger e = new BigInteger("3");
         while (!phi.gcd(e).equals(BigInteger.ONE)) {
             e = e.add(BigInteger.ONE);
         }
@@ -53,7 +53,7 @@ public class RSA {
     public RSA cypherText(byte[] text){
         // System.out.println("C: "+turnToHexcode(text));
         BigInteger value = new BigInteger(text);
-        BigInteger cypher = new BigInteger(String.valueOf(value)).modPow(publicKey.get(0), publicKey.get(1));
+        BigInteger cypher = new BigInteger(String.valueOf(value)).modPow(privateKey.get(0), privateKey.get(1));
         // System.out.println("C: "+turnToHexcode(cypher.toByteArray()));
         setCypher(cypher.toByteArray());
         return this;
@@ -81,7 +81,7 @@ public class RSA {
     public byte[] decypherText(){
         // System.out.println("D: "+turnToHexcode(cypher));
         BigInteger value = new BigInteger(cypher);
-        BigInteger decypher = value.modPow(privateKey.get(0), privateKey.get(1));
+        BigInteger decypher = value.modPow(publicKey.get(0), publicKey.get(1));
         // System.out.println("D: "+turnToHexcode(decypher.toByteArray()));
         return decypher.toByteArray();
     }

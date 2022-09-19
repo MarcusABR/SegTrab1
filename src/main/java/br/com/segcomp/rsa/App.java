@@ -16,39 +16,17 @@ public class App {
             OAEP oaep = new OAEP(dg, new MGF1(dg), new SecureRandom());
             RSA rsa = new RSA(new PrimeGenerator(new SecureRandom()), oaep, new SecureRandom());
             rsa.createKeys();
-            String message = "ABC";
+            String message = "ABCasdasdasdasdasdashggygacdascascascasczasujhduasgyhascasASCASCADcsasdasdBbB";
             
             byte[] code = generateHash(message.getBytes());
             byte[] x = Base64.getEncoder().encode(code);
-            System.out.println(code);
+            System.out.println(oaep.turnToHexcode(code));
             rsa.cypherText(code);
-            rsa.decypherText();
-            System.out.println(rsa.getCypheredText());
+            System.out.println(oaep.turnToHexcode(rsa.decypherText()));
 
 
             byte[] res = rsa.getOaep().padding(code, "aiai");
             List<byte[]> depadding = rsa.getOaep().depadding(res, code.length);
-
-            // public static void main(String[] args) {
-    //     MessageDigest dg;
-    //     try {
-    //         dg = MessageDigest.getInstance("SHA-256");
-    //         OAEP oaep = new OAEP(dg, new MGF1(dg), new SecureRandom());
-    //         byte[] asd = oaep.padding("ayuashudasdasdasdasdasdasdasdqda", "asdasdasdasdasdasd");
-    //         String xuy = oaep.depadding(asd,);
-
-    //     } catch (NoSuchAlgorithmException e) {
-    //         // TODO Auto-generated catch block
-    //         e.printStackTrace();
-    //     } catch (IOException e) {
-    //         // TODO Auto-generated catch block
-    //         e.printStackTrace();
-    //     }
-        
-    // }
-
-
-
 
         } catch (NoSuchAlgorithmException | IOException e) {
             // TODO Auto-generated catch block
