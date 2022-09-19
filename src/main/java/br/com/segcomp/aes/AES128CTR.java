@@ -3,7 +3,9 @@ package br.com.segcomp.aes;
 import br.com.segcomp.aes.block.Block;
 import br.com.segcomp.aes.key.AES128KeyScheduler;
 import br.com.segcomp.aes.key.Key;
+import br.com.segcomp.io.IO;
 
+import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -14,6 +16,8 @@ public class AES128CTR {
 
     private final int wordSize = 4;
     private final int keyLengthInBytes = 16;
+
+    private final byte[] zero = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     private AES128Encryptor encryptor;
     private AES128Decryptor decryptor;
 
@@ -28,6 +32,10 @@ public class AES128CTR {
 
     public Key getKey() {
         return this.key;
+    }
+
+    public void setKey(Key key) {
+        this.key = key;
     }
 
     public void encrypt(Block block) {
@@ -46,14 +54,14 @@ public class AES128CTR {
         decryptor.lastRound(block, expandedKey[0]);
     }
 
-    public void encryptStream(Block[] blocks) {
-        /**
-         * SecureRandom secureRandom = new SecureRandom();
-         *         byte[] counterStart = new byte[16];
-         *         secureRandom.nextBytes(counterStart);
-         *         this.counter = counterStart;
-         */
-        BigInteger counter = BigInteger.ZERO;
+    public void encryptStream(Block[] blocks) throws FileNotFoundException {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] counterStart = new byte[16];
+        secureRandom.nextBytes(counterStart);
+        this.counter = counterStart;
+        IO io = new IO();
+        io.writeFileToResources(this.counter, ".txt");
+        BigInteger counter = new BigInteger(this.counter);
         for (Block b : blocks) {
             Block initializationVector = new Block(counter.toByteArray());
             encrypt(initializationVector);
@@ -63,8 +71,8 @@ public class AES128CTR {
     }
 
     public void decryptStream(Block[] blocks) {
-        //BigInteger counter = new BigInteger(this.counter);
-        BigInteger counter = BigInteger.ZERO;
+        BigInteger counter = new BigInteger(this.counter);
+        //BigInteger counter = new BigInteger("0000000000000000", 16);
         for (Block b : blocks) {
             Block initializationVector = new Block(counter.toByteArray());
             encrypt(initializationVector);

@@ -4,6 +4,8 @@ import br.com.segcomp.aes.AES128CTR;
 import br.com.segcomp.aes.block.Block;
 import br.com.segcomp.io.IO;
 
+import java.util.concurrent.TimeUnit;
+
 public class App {
     public static void main(String[] args) throws Exception {
         // Calcular o hash
@@ -19,9 +21,13 @@ public class App {
         Block[] blocks = io.openFileFromResources("Message.txt").orElse(null);
         AES.encryptStream(blocks);
         io.writeFileToResources(stringBuilder.toString().getBytes(), ".txt");
+        Thread.sleep(1000);
+        io.writeFileToResources(Block.getByteArray(blocks), ".txt");
+        AES.decryptStream(blocks);
         io.writeFileToResources(Block.getByteArray(blocks), ".txt");
         // Usar o RSA para criptografar a chave do AES
         // Usar o RSA para descriptografar a chave do AES
+        //-----> usa essa linha pra setar a chave descriptografada: AES.setKey( );
         // Usar o RSA pra descriptografar a chave e o hash
         // Descriptografar o arquivo
 
