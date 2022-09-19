@@ -3,16 +3,7 @@ package br.com.segcomp.aes;
 import br.com.segcomp.aes.block.Block;
 import br.com.segcomp.io.IO;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 public class App {
 
