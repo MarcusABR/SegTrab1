@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class OAEP {
@@ -15,23 +17,23 @@ public class OAEP {
     final public MGF1 mgf1;
     final public Random random;
 
-    public static void main(String[] args) {
-        MessageDigest dg;
-        try {
-            dg = MessageDigest.getInstance("SHA-256");
-            OAEP oaep = new OAEP(dg, new MGF1(dg), new SecureRandom());
-            byte[] asd = oaep.padding("ayuashudasdasdasdasdasdasdasdqda", "asdasdasdasdasdasd");
-            String xuy = oaep.depadding(asd, "ayuashudasdasdasdasdasdasdasdqda");
+    // public static void main(String[] args) {
+    //     MessageDigest dg;
+    //     try {
+    //         dg = MessageDigest.getInstance("SHA-256");
+    //         OAEP oaep = new OAEP(dg, new MGF1(dg), new SecureRandom());
+    //         byte[] asd = oaep.padding("ayuashudasdasdasdasdasdasdasdqda", "asdasdasdasdasdasd");
+    //         String xuy = oaep.depadding(asd,);
 
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    //     } catch (NoSuchAlgorithmException e) {
+    //         // TODO Auto-generated catch block
+    //         e.printStackTrace();
+    //     } catch (IOException e) {
+    //         // TODO Auto-generated catch block
+    //         e.printStackTrace();
+    //     }
         
-    }
+    // }
     
     public OAEP(MessageDigest digest, MGF1 mgf1, Random random) {
         this.digest = digest;
@@ -57,8 +59,8 @@ public class OAEP {
         }
     }
 
-    public byte[] padding(String message, String label) throws IOException{
-        int mLen = message.getBytes().length;
+    public byte[] padding(byte[] message, String label) throws IOException{
+        int mLen = message.length;
 
         if(mLen >  K-hLen*2-2){
             System.out.println("Mensagem muito longa"); //TODO throw an error
@@ -80,7 +82,7 @@ public class OAEP {
         os.write(lHash);
         os.write(ps);
         os.write(new byte[]{(byte)0x01});
-        os.write(message.getBytes());
+        os.write(message);
         db = os.toByteArray();
         
         byte[] dbmask = mgf1.generateMaska(seed, K-hLen-1);
@@ -108,7 +110,7 @@ public class OAEP {
         return outputStream.toByteArray();
     }
 
-    public String depadding(byte[] cryptogram, String message) throws IOException{
+    public List<byte[]> depadding(byte[] cryptogram, int len) throws IOException{
 
         if(cryptogram.length!=K){
             throw new RuntimeException("Invalid cryptogram");
@@ -137,12 +139,16 @@ public class OAEP {
             }
         
         byte[] label = new byte[hLen]; 
-        byte[] msg = new byte[message.getBytes().length]; 
+        byte[] msg = new byte[len]; 
         
         System.arraycopy(db, 0, label, 0, hLen); 
-        System.arraycopy(db, K-message.getBytes().length-hLen-1, msg, 0, message.getBytes().length); 
+        System.arraycopy(db, K-len-hLen-1, msg, 0, len); 
         System.out.println(turnToHexcode(msg));
-        return db.toString();
+
+        List<byte[]> result = new ArrayList<>();
+        result.add(label);
+        result.add(msg);
+        return result;
 
 
     }
