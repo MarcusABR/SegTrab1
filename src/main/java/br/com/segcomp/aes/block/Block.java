@@ -8,6 +8,12 @@ public class Block {
         this.block = block;
     }
 
+    public Block[] createBlockArray(byte[] block, int bytesPerBlock) {
+        Block[] blockArray = new Block[block.length/bytesPerBlock];
+        for(int i = 0; i < blockArray.length; i++) {
+
+        }
+    }
     public byte[] getBlock() {
         return block;
     }
