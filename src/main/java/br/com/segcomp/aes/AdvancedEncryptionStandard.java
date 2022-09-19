@@ -6,7 +6,6 @@ import br.com.segcomp.aes.key.Key;
 
 abstract class AdvancedEncryptionStandard {
 
-    KeyLength keyLength;
     Key key;
     Block[] expandedKey;
 

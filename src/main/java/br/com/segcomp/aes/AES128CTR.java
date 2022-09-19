@@ -1,7 +1,6 @@
 package br.com.segcomp.aes;
 
 import br.com.segcomp.aes.block.Block;
-import br.com.segcomp.aes.enums.KeyLength;
 import br.com.segcomp.aes.key.AES128KeyScheduler;
 import br.com.segcomp.aes.key.Key;
 
@@ -12,14 +11,15 @@ public class AES128CTR extends AdvancedEncryptionStandard {
 
     private final int wordSize = 4;
 
+    private final int keyLengthInBytes = 16;
+
     private AES128Encryptor encryptor;
     private AES128Decryptor decryptor;
 
     private byte[] counter;
 
     public AES128CTR() throws Exception {
-        this.keyLength = KeyLength.KEY128;
-        this.key = new Key(keyLength.getLengthInBytes());
+        this.key = new Key(keyLengthInBytes);
         this.expandedKey = new AES128KeyScheduler().schedule(key);
         this.encryptor = new AES128Encryptor();
         this.decryptor = new AES128Decryptor();

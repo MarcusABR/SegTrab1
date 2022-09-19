@@ -27,8 +27,8 @@ public class IO {
         return Optional.ofNullable(fileBlocks);
     }
 
-    public void writeFileToResources(byte[] bytes) throws FileNotFoundException {
-        Path outputPath = Paths.get("src/main/java/br/com/segcomp/aes/resources/output_" + String.valueOf(Date.from(Instant.now())).replace(":", "") + ".jpg");
+    public void writeFileToResources(byte[] bytes, String extension) throws FileNotFoundException {
+        Path outputPath = Paths.get("src/main/java/br/com/segcomp/aes/resources/output_" + String.valueOf(Date.from(Instant.now())).replace(":", "") + extension);
         try (FileOutputStream output = new FileOutputStream(outputPath.toString())){
             output.write(bytes);
         } catch (IOException e) {

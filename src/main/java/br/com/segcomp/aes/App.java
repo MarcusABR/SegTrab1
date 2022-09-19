@@ -38,7 +38,7 @@ public class App {
         }**/
         System.out.println(" ");
         byte[] decrypted = Block.getByteArray(stream);
-        io.writeFileToResources(decrypted);
+        io.writeFileToResources(decrypted, ".jpg");
         //String decryptedString = new String(decrypted, Charset.defaultCharset());
         //System.out.println(decryptedString);
     }
