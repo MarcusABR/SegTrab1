@@ -1,6 +1,5 @@
-package br.com.segcomp.aes;
+package br.com.segcomp.aes.generators;
 
-import javax.crypto.KeyGenerator;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 

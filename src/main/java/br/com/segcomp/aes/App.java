@@ -5,9 +5,13 @@ import br.com.segcomp.aes.block.Block;
 public class App {
 
     public static void main(String[] args) throws Exception {
-        //byte[] bytes = {(byte) 0xEA,0x04,0x65, (byte) 0x85, (byte) 0x83,0x45,0x5D, (byte) 0x96,0x5C,0x33, (byte) 0x98, (byte) 0xB0, (byte) 0xF0,0x2D, (byte) 0xAD, (byte) 0xC5};
-        //Block block = new Block(bytes);
         AdvancedEncryptionStandard aes = new AES128();
-        //aes.transform(block);
+        byte[] bytes = {0x00, 0x01, 0x02, 0x02, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
+        Block block = new Block(bytes);
+        System.out.println(block);
+        aes.encrypt(block);
+        System.out.println(block);
+        aes.decrypt(block);
+        System.out.println(block);
     }
 }

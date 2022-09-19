@@ -29,6 +29,10 @@ public class Block {
         if (wordSize >= 0) System.arraycopy(word, 0, block, startIndex, wordSize);
     }
 
+    public int getSize() {
+        return block.length;
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

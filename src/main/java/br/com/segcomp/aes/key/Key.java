@@ -3,11 +3,6 @@ package br.com.segcomp.aes.key;
 import br.com.segcomp.aes.block.Block;
 
 import java.security.SecureRandom;
-
-public class Key {
-
-    private Block key;
-
     /** Test keys:
      *
      *  For the key 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00, the expanded key is:
@@ -66,6 +61,11 @@ public class Key {
      * 5a 84 4b 2f 2e 08 b2 b1 aa 0f 66 9c 9d 8e c9 a9
      * 75 59 98 71 5b 51 2a c0 f1 5e 4c 5c 6c d0 85 f5
     **/
+
+public class Key {
+
+    private Block key;
+
 
     public Key(int keyLength){
 

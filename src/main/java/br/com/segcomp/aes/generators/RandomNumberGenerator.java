@@ -1,4 +1,4 @@
-package br.com.segcomp.aes;
+package br.com.segcomp.aes.generators;
 
 import java.math.BigInteger;
 

@@ -1,7 +1,7 @@
 package br.com.segcomp.aes.key;
 
 import br.com.segcomp.aes.block.Block;
-import br.com.segcomp.aes.sbox.SBox;
+import br.com.segcomp.aes.tables.SBox;
 
 public class AES128KeyScheduler implements KeyScheduler{
 

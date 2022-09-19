@@ -1,6 +1,4 @@
-package br.com.segcomp.aes.sbox;
-
-import java.util.SortedMap;
+package br.com.segcomp.aes.tables;
 
 public class SBox {
 
@@ -15,6 +13,10 @@ public class SBox {
 
     public byte substituteByte(byte position) {
         return (byte) sbox[position & 0x000000FF];
+    }
+
+    public byte invSubstituteByte(byte position) {
+        return (byte) inverseSbox[position & 0x000000FF];
     }
 
     final int[] sbox = {	0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
