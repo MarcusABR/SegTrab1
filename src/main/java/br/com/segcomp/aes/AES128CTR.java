@@ -7,12 +7,13 @@ import br.com.segcomp.aes.key.Key;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-public class AES128CTR extends AdvancedEncryptionStandard {
+public class AES128CTR {
+
+    Key key;
+    Block[] expandedKey;
 
     private final int wordSize = 4;
-
     private final int keyLengthInBytes = 16;
-
     private AES128Encryptor encryptor;
     private AES128Decryptor decryptor;
 
@@ -25,8 +26,11 @@ public class AES128CTR extends AdvancedEncryptionStandard {
         this.decryptor = new AES128Decryptor();
     }
 
-    @Override
-    void encrypt(Block block) {
+    public Key getKey() {
+        return this.key;
+    }
+
+    public void encrypt(Block block) {
         encryptor.preRound(block, expandedKey[0]);
         for(int i = 1; i < 10; i++){
             encryptor.round(block, expandedKey[i]);
@@ -34,8 +38,7 @@ public class AES128CTR extends AdvancedEncryptionStandard {
         encryptor.lastRound(block, expandedKey[10]);
     }
 
-    @Override
-    void decrypt(Block block) {
+    public void decrypt(Block block) {
         decryptor.preRound(block, expandedKey[10]);
         for(int i = 9; i > 0; i--){
             decryptor.round(block, expandedKey[i]);
@@ -43,12 +46,14 @@ public class AES128CTR extends AdvancedEncryptionStandard {
         decryptor.lastRound(block, expandedKey[0]);
     }
 
-    void encryptStream(Block[] blocks) {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] counterStart = new byte[16];
-        secureRandom.nextBytes(counterStart);
-        this.counter = counterStart;
-        BigInteger counter = new BigInteger(counterStart);
+    public void encryptStream(Block[] blocks) {
+        /**
+         * SecureRandom secureRandom = new SecureRandom();
+         *         byte[] counterStart = new byte[16];
+         *         secureRandom.nextBytes(counterStart);
+         *         this.counter = counterStart;
+         */
+        BigInteger counter = BigInteger.ZERO;
         for (Block b : blocks) {
             Block initializationVector = new Block(counter.toByteArray());
             encrypt(initializationVector);
@@ -57,8 +62,9 @@ public class AES128CTR extends AdvancedEncryptionStandard {
         }
     }
 
-    void decryptStream(Block[] blocks) {
-        BigInteger counter = new BigInteger(this.counter);
+    public void decryptStream(Block[] blocks) {
+        //BigInteger counter = new BigInteger(this.counter);
+        BigInteger counter = BigInteger.ZERO;
         for (Block b : blocks) {
             Block initializationVector = new Block(counter.toByteArray());
             encrypt(initializationVector);
