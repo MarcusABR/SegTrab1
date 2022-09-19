@@ -3,6 +3,7 @@ package br.com.segcomp.rsa;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.List;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,19 +16,18 @@ public class App {
             OAEP oaep = new OAEP(dg, new MGF1(dg), new SecureRandom());
             RSA rsa = new RSA(new PrimeGenerator(new SecureRandom()), oaep, new SecureRandom());
             rsa.createKeys();
-            String message = "A";
+            String message = "ABC";
+            
             byte[] code = generateHash(message.getBytes());
-            System.out.println("Cifrada "+oaep.turnToHexcode(code));
+            byte[] x = Base64.getEncoder().encode(code);
+            System.out.println(code);
             rsa.cypherText(code);
             rsa.decypherText();
+            System.out.println(rsa.getCypheredText());
 
-            System.out.println("entra+ "+oaep.turnToHexcode(code));
+
             byte[] res = rsa.getOaep().padding(code, "aiai");
-            System.out.println(oaep.turnToHexcode(res));
-            System.out.println(oaep.turnToHexcode(generateHash("aiai".getBytes())));
             List<byte[]> depadding = rsa.getOaep().depadding(res, code.length);
-            System.out.println("res "+oaep.turnToHexcode(depadding.get(1)));
-            System.out.println("res "+oaep.turnToHexcode(depadding.get(0)));
 
             // public static void main(String[] args) {
     //     MessageDigest dg;

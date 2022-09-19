@@ -89,7 +89,6 @@ public class OAEP {
         byte[] maskedDB = xorBytes(db, dbmask);
         byte[] seedMask = mgf1.generateMaska(maskedDB, hLen);
         byte[] maskedSeed = xorBytes(seed, seedMask);
-        System.out.println(turnToHexcode(lHash));
 
         os.reset();
         os.write(new byte[1]);
@@ -128,7 +127,6 @@ public class OAEP {
 
         byte[] dbMask = mgf1.generateMaska(seed, K-hLen-1);
         byte[] db = xorBytes(maskedDB, dbMask);
-        System.out.println(turnToHexcode(db));
         
         StringBuffer hexString = new StringBuffer();
 
@@ -143,7 +141,6 @@ public class OAEP {
         
         System.arraycopy(db, 0, label, 0, hLen); 
         System.arraycopy(db, K-len-hLen-1, msg, 0, len); 
-        System.out.println(turnToHexcode(msg));
 
         List<byte[]> result = new ArrayList<>();
         result.add(label);
