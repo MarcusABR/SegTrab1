@@ -1,52 +1,73 @@
 package br.com.segcomp.rsa;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Base64;
+import java.util.List;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class App {
     public static void main(String[] args) {
-        PrimeGenerator pr = new PrimeGenerator(new SecureRandom());
-
-        BigInteger p1 = pr.generate();
-        BigInteger p2 = pr.generate();
-        BigInteger n = p1.multiply(p2);
-        BigInteger phi = p1.subtract(BigInteger.ONE).multiply(p2.subtract(BigInteger.ONE));
-        BigInteger e = findE(phi);
-        System.out.println(p1);
-        System.out.println(p2);
-        System.out.println(n);
-        System.out.println(phi);
-        System.out.println();
-
-        BigInteger d = e.modInverse(p1.multiply(p2));
-        System.out.println("Este é o d: "+ d);
-
-
-        char message = 'A';
-
-        Integer value = Integer.valueOf(message);
-        BigInteger cypher = new BigInteger(String.valueOf(value)).modPow(e, n);
-        System.out.println("Cifrada: "+ cypher);
-
-        BigInteger decypher = cypher.modPow(d, n);
-        System.out.println("Decifrada: "+ decypher);
-        //find e
-        //com E e N tenho a chvae
-
-        // 
         
+        try {
+            MessageDigest dg = MessageDigest.getInstance("SHA-256");
+            OAEP oaep = new OAEP(dg, new MGF1(dg), new SecureRandom());
+            RSA rsa = new RSA(new PrimeGenerator(new SecureRandom()), oaep, new SecureRandom());
+            rsa.createKeys();
+            String message = "ABC";
+            
+            byte[] code = generateHash(message.getBytes());
+            byte[] x = Base64.getEncoder().encode(code);
+            System.out.println(code);
+            rsa.cypherText(code);
+            rsa.decypherText();
+            System.out.println(rsa.getCypheredText());
 
+
+            byte[] res = rsa.getOaep().padding(code, "aiai");
+            List<byte[]> depadding = rsa.getOaep().depadding(res, code.length);
+
+            // public static void main(String[] args) {
+    //     MessageDigest dg;
+    //     try {
+    //         dg = MessageDigest.getInstance("SHA-256");
+    //         OAEP oaep = new OAEP(dg, new MGF1(dg), new SecureRandom());
+    //         byte[] asd = oaep.padding("ayuashudasdasdasdasdasdasdasdqda", "asdasdasdasdasdasd");
+    //         String xuy = oaep.depadding(asd,);
+
+    //     } catch (NoSuchAlgorithmException e) {
+    //         // TODO Auto-generated catch block
+    //         e.printStackTrace();
+    //     } catch (IOException e) {
+    //         // TODO Auto-generated catch block
+    //         e.printStackTrace();
+    //     }
         
-        // System.out.println(value);
-        // System.out.println();     
+    // }
 
-    }
 
-    public static BigInteger findE(BigInteger phi){
-        BigInteger e = new BigInteger("65538");
-        while (!phi.gcd(e).equals(BigInteger.ONE)) {
-            e = e.add(BigInteger.ONE);
+
+
+        } catch (NoSuchAlgorithmException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        return e;
+        
+
+        
     }
+
+    public static byte[] generateHash(byte[] info) throws NoSuchAlgorithmException{
+        MessageDigest dg = MessageDigest.getInstance("SHA-256");
+        byte[] code = dg.digest(info);
+        return code;
+    }
+
+  
+
+    
+
+    
 }
