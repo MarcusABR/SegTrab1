@@ -5,11 +5,11 @@ import br.com.segcomp.io.IO;
 
 import java.nio.charset.Charset;
 
-public class App {
+public class Test {
 
     public static void main(String[] args) throws Exception {
         IO io = new IO();
-        AdvancedEncryptionStandard aes = new AES128CTR();
+        AES128CTR AES = new AES128CTR();
         byte[] bytes = {0x00, 0x01, 0x02, 0x02, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
         String string = "O rato roeu a roupa do rei de roma rapazzzzzz";
         bytes = string.getBytes(Charset.defaultCharset());
@@ -27,12 +27,12 @@ public class App {
             System.out.println(b);
         }
         System.out.println(" ");
-        aes.encryptStream(stream);
+        AES.encryptStream(stream);
         /**for(Block b : stream) {
             System.out.println(b);
         }**/
         System.out.println(" ");
-        aes.decryptStream(stream);
+        AES.decryptStream(stream);
         /**for(Block b : stream) {
             System.out.println(b);
         }**/

@@ -3,16 +3,21 @@ package br.com.segcomp.aes;
 import br.com.segcomp.aes.block.Block;
 import br.com.segcomp.aes.key.AES128KeyScheduler;
 import br.com.segcomp.aes.key.Key;
+import br.com.segcomp.io.IO;
 
+import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-public class AES128CTR extends AdvancedEncryptionStandard {
+public class AES128CTR {
+
+    Key key;
+    Block[] expandedKey;
 
     private final int wordSize = 4;
-
     private final int keyLengthInBytes = 16;
 
+    private final byte[] zero = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     private AES128Encryptor encryptor;
     private AES128Decryptor decryptor;
 
@@ -25,8 +30,15 @@ public class AES128CTR extends AdvancedEncryptionStandard {
         this.decryptor = new AES128Decryptor();
     }
 
-    @Override
-    void encrypt(Block block) {
+    public Key getKey() {
+        return this.key;
+    }
+
+    public void setKey(Key key) {
+        this.key = key;
+    }
+
+    public void encrypt(Block block) {
         encryptor.preRound(block, expandedKey[0]);
         for(int i = 1; i < 10; i++){
             encryptor.round(block, expandedKey[i]);
@@ -34,8 +46,7 @@ public class AES128CTR extends AdvancedEncryptionStandard {
         encryptor.lastRound(block, expandedKey[10]);
     }
 
-    @Override
-    void decrypt(Block block) {
+    public void decrypt(Block block) {
         decryptor.preRound(block, expandedKey[10]);
         for(int i = 9; i > 0; i--){
             decryptor.round(block, expandedKey[i]);
@@ -43,12 +54,14 @@ public class AES128CTR extends AdvancedEncryptionStandard {
         decryptor.lastRound(block, expandedKey[0]);
     }
 
-    void encryptStream(Block[] blocks) {
+    public void encryptStream(Block[] blocks) throws FileNotFoundException {
         SecureRandom secureRandom = new SecureRandom();
         byte[] counterStart = new byte[16];
         secureRandom.nextBytes(counterStart);
         this.counter = counterStart;
-        BigInteger counter = new BigInteger(counterStart);
+        IO io = new IO();
+        io.writeFileToResources(this.counter, ".txt");
+        BigInteger counter = new BigInteger(this.counter);
         for (Block b : blocks) {
             Block initializationVector = new Block(counter.toByteArray());
             encrypt(initializationVector);
@@ -57,8 +70,9 @@ public class AES128CTR extends AdvancedEncryptionStandard {
         }
     }
 
-    void decryptStream(Block[] blocks) {
+    public void decryptStream(Block[] blocks) {
         BigInteger counter = new BigInteger(this.counter);
+        //BigInteger counter = new BigInteger("0000000000000000", 16);
         for (Block b : blocks) {
             Block initializationVector = new Block(counter.toByteArray());
             encrypt(initializationVector);
