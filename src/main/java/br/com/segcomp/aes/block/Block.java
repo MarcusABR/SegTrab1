@@ -1,5 +1,7 @@
 package br.com.segcomp.aes.block;
 
+import java.util.Arrays;
+
 public class Block {
 
     private byte[] block;
@@ -31,6 +33,24 @@ public class Block {
 
     public int getSize() {
         return block.length;
+    }
+    public static Block[] createBlockArray(byte[] block, int bytesPerBlock) {
+        int blocks = (int) Math.ceil((double)block.length/bytesPerBlock);
+        block = Arrays.copyOf(block, blocks*16);
+        Block[] blockArray = new Block[blocks];
+        for(int i = 0; i < blockArray.length; i++) {
+            blockArray[i] = new Block(new byte[bytesPerBlock]);
+            System.arraycopy(block, i*16, blockArray[i].block, 0, 16);
+        }
+        return blockArray;
+    }
+
+    public static byte[] getByteArray(Block[] blocks) {
+        byte[] array = new byte[blocks.length*blocks[0].getSize()];
+        for(int i = 0; i < blocks.length; i++) {
+            System.arraycopy(blocks[i].block, 0, array, i*16, 16);
+        }
+        return array;
     }
 
     @Override

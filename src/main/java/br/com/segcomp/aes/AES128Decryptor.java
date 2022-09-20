@@ -65,7 +65,7 @@ public class AES128Decryptor {
         block.setBlock(mixed);
     }
 
-    private void addRoundKey(Block block, Block key) {
+    public void addRoundKey(Block block, Block key) {
         byte[] blockBytes = block.getBlock();
         byte[] keyBytes = key.getBlock();
         for(int i = 0; i < block.getSize(); i++) {
