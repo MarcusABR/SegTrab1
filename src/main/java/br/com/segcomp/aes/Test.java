@@ -38,7 +38,7 @@ public class Test {
         }**/
         System.out.println(" ");
         byte[] decrypted = Block.getByteArray(stream);
-        io.writeFileToResources(decrypted, ".jpg");
+        //io.writeFileToResources(decrypted, ".jpg");
         //String decryptedString = new String(decrypted, Charset.defaultCharset());
         //System.out.println(decryptedString);
     }

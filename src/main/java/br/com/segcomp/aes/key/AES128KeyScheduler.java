@@ -22,7 +22,7 @@ public class AES128KeyScheduler implements KeyScheduler{
     }
 
     private void copyInitialKey(Key key) {
-        expandedKey[0] = key.getKey();
+        expandedKey[0] = key.getBlock();
     }
 
     private void rotateWord(byte[] word) {
