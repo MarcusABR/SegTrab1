@@ -17,7 +17,9 @@ Neste trabalho estará descrito a implementação conjunta dos algoritmos de cri
 
 ### Implementação
 
-O trabalho foi desenvolvido na linguagem Java. Essa opção foi feita devido a maior facilidade de manutenção e debugging do projeto. Ocorreu versionamento por Git utilizando a plataforma GitHub. 
+O trabalho foi desenvolvido na linguagem Java. Essa opção foi feita devido a maior facilidade de manutenção e debugging do projeto. Ocorreu versionamento por Git utilizando a plataforma GitHub.
+
+É possível acompanhar os principais processos executando a classe src/main/java/br/com/segcomp/App, onde o método Main demonstra os processos de cifração e decifração por AES, obtenção do hash da mensagem e da chave, cifração e decifração por RSA e compartilhamento por OAEP.
 
 ### RSA 
 
@@ -79,14 +81,16 @@ A última rodada é similar as anteriores, porém sem executar o procedimento Mi
 
 Para a decifração, todos as etapas são aplicadas em sua forma inversa.
 
-O protocolo determina que a chave deve passar por um processo de expansão para ser aplicada a todas as rodadas. O processo consistem em tomar a chave como words de 32 bits, e gerar uma nova word de chave a partir das words já disponíveis até completar as 11 chaves necessárias. A geração envolve substituições, rotações e operações XOR entre as words. A implementado dessa etapa está contida na classe AES128KeyScheduler.   
+O protocolo determina que a chave deve passar por um processo de expansão para ser aplicada a todas as rodadas. O processo consistem em tomar a chave como words de 32 bits, e gerar uma nova word de chave a partir das words já disponíveis até completar as 11 chaves necessárias. A geração envolve substituições, rotações e operações XOR entre as words. A implementação dessa etapa está contida na classe AES128KeyScheduler.   
 
 Da forma como foi descrito até aqui, o padrão é capaz de cifrar e decifrar um bloco de 128 bits. Poderíamos utilizar o mesmo processo seguidas vezes para cifrar cadeias de 128 bits. O resultado apresentaria uma vulnerabilidade relevante: como a mesma chave foi utilizada para todos os blocos da cadeia, blocos iguais gerariam cifrações iguais. Essa característica abre portas para ataques por análise. 
 
-O modo CTR, ou Counter, visa aumentar a segurança do protocolo. Se a chave 
+O modo CTR, ou Counter, visa aumentar a segurança do protocolo. É utilizado um contador como vetor de inicialização das chaves, ou seja, a cada bloco é cifrado pela chave operada com XOR ao valor do contador, permitindo que a chave varie ao longo da cifração da cadeia. 
 
-A seguir, mencionaremos 
+A seguir, fazemos menção a peculiaridades interessantes da implementação.
 
-Os métodos operam sobre representações de blocos de bytes encapsulado na classe Block. A classe possui métodos para gerar blocos de n bits a partir de cadeias maiores.
+Os métodos operam sobre representações de blocos de bytes encapsulado na classe Block. A classe possui métodos para gerar blocos de n bits a partir de cadeias maiores. Também implementamos uma sobrecarga do método toString para facilitar a impressão dos blocos na tela.
 
-A implementação segue todos os passos de cifração e decifração definidos no padrão.
+A chave inicial é gerada através da biblioteca SecureRandom, nativa do Java. A chave expandida, por sua vez, resulta de um processo totalmente implementado pelos alunos.
+
+Os métodos MixColumns e InvMixColumns implementam as transformações necessárias corretas, porém não são uma tradução literal do processo teórico que as explica. Isso ocorreu pois as operações no campo de Galois envolvem transformações polinomiais complexas de ser implementadas. Para fins didáticos, buscamos alternativas mais simples de implementação. No caso do InvMixColumns, usamos tabelas de equivalência para obter os resultados corretos. 
