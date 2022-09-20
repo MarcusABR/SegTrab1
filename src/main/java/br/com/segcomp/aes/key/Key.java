@@ -64,23 +64,25 @@ import java.security.SecureRandom;
 
 public class Key {
 
-    private Block key;
-
+    private Block block;
 
     public Key(int keyLength){
-
-        byte[] bytes = {(byte) 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-        this.key = new Block(bytes);
-        //this.key = new Block(new byte[keyLength]);
-        //SecureRandom sr = new SecureRandom();
-        //sr.nextBytes(key.getBlock());
+        //byte[] bytes = {(byte) 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+        //this.key = new Block(bytes);
+        this.block = new Block(new byte[keyLength]);
+        SecureRandom sr = new SecureRandom();
+        sr.nextBytes(block.getBlock());
     }
 
-    public Block getKey() {
-        return key;
+    public Key(Block block) {
+        this.block = block;
     }
 
-    public void setKey(Block key) {
-        this.key = key;
+    public Block getBlock() {
+        return block;
+    }
+
+    public void setBlock(Block block) {
+        this.block = this.block;
     }
 }

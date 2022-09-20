@@ -38,6 +38,10 @@ public class AES128CTR {
         this.key = key;
     }
 
+    public Block[] getExpandedKey() {
+        return expandedKey;
+    }
+
     public void encrypt(Block block) {
         encryptor.preRound(block, expandedKey[0]);
         for(int i = 1; i < 10; i++){
@@ -60,7 +64,6 @@ public class AES128CTR {
         secureRandom.nextBytes(counterStart);
         this.counter = counterStart;
         IO io = new IO();
-        io.writeFileToResources(this.counter, ".txt");
         BigInteger counter = new BigInteger(this.counter);
         for (Block b : blocks) {
             Block initializationVector = new Block(counter.toByteArray());

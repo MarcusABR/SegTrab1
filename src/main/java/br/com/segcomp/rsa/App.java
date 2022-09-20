@@ -16,38 +16,28 @@ public class App {
             OAEP oaep = new OAEP(dg, new MGF1(dg), new SecureRandom());
             RSA rsa = new RSA(new PrimeGenerator(new SecureRandom()), oaep, new SecureRandom());
             rsa.createKeys();
-            String message = "ABC";
+            //Inserir mensagem a ser criptografa no RSA aq
+            String message = "AsajhvdaygusfasacasdasfascaAASDASASDACS";
             
             byte[] code = generateHash(message.getBytes());
+            System.out.println("\n");
+            System.out.println("Hash da mensagem: "+oaep.turnToHexcode(code));
             byte[] x = Base64.getEncoder().encode(code);
-            System.out.println(code);
             rsa.cypherText(code);
-            rsa.decypherText();
-            System.out.println(rsa.getCypheredText());
+            System.out.println("\nMensagem cifrada: "+oaep.turnToHexcode(rsa.getCypheredText()));
+            System.out.println("\nMensagem decifrada: "+oaep.turnToHexcode(rsa.decypherText()));
 
-
-            byte[] res = rsa.getOaep().padding(code, "aiai");
-            List<byte[]> depadding = rsa.getOaep().depadding(res, code.length);
-
-            // public static void main(String[] args) {
-    //     MessageDigest dg;
-    //     try {
-    //         dg = MessageDigest.getInstance("SHA-256");
-    //         OAEP oaep = new OAEP(dg, new MGF1(dg), new SecureRandom());
-    //         byte[] asd = oaep.padding("ayuashudasdasdasdasdasdasdasdqda", "asdasdasdasdasdasd");
-    //         String xuy = oaep.depadding(asd,);
-
-    //     } catch (NoSuchAlgorithmException e) {
-    //         // TODO Auto-generated catch block
-    //         e.printStackTrace();
-    //     } catch (IOException e) {
-    //         // TODO Auto-generated catch block
-    //         e.printStackTrace();
-    //     }
-        
-    // }
-
-
+            System.out.println("---------------------------------------OAEP---------------------------------------");
+            String label = "Teste";
+            System.out.println("\nHash da label: "+oaep.turnToHexcode(generateHash(label.getBytes())));
+            byte[] res = rsa.getOaep().padding(message.getBytes(), label);
+            System.out.println("\nPadding: "+oaep.turnToHexcode(res));
+            rsa.cypherText(res);
+            System.out.println("\nMensagem cifrada com RSA: "+oaep.turnToHexcode(rsa.getCypheredText()));
+            System.out.println("\nMensagem decifrada: "+oaep.turnToHexcode(rsa.decypherText()));
+            List<byte[]> depadding = rsa.getOaep().depadding(rsa.decypherText(), message.getBytes().length);
+            System.out.println("\nMensagem decifrada: "+oaep.turnToHexcode(depadding.get(0)));
+            System.out.println("\nHash da label decifrada: "+oaep.turnToHexcode(depadding.get(0)));
 
 
         } catch (NoSuchAlgorithmException | IOException e) {

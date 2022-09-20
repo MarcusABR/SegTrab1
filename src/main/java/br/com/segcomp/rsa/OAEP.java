@@ -61,6 +61,7 @@ public class OAEP {
 
     public byte[] padding(byte[] message, String label) throws IOException{
         int mLen = message.length;
+        System.out.println("Tamanho da mensagem "+mLen);
 
         if(mLen >  K-hLen*2-2){
             System.out.println("Mensagem muito longa"); //TODO throw an error
